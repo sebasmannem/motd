@@ -28,10 +28,14 @@ type MemeDir struct {
 	files MemeFiles
 }
 
-func NewMemeDir(path string) MemeDir {
-	return MemeDir{
+func NewMemeDir(path string) (*MemeDir, error) {
+	md := MemeDir{
 		path: path,
 	}
+	if md.getFiles() != nil {
+		return &md, nil
+	}
+	return nil, fmt.Errorf("folder does not contain memes!!!")
 }
 
 func (md *MemeDir) getFiles() MemeFiles {
@@ -54,18 +58,14 @@ func (md *MemeDir) getFiles() MemeFiles {
 	return nil
 }
 
-func (md *MemeDir) Print() {
-	if entries := md.getFiles(); entries == nil {
-		fmt.Printf("Location %s does no contain memes\n", md.path)
-	} else {
-		fmt.Printf("Out of all the meme files in %s:\n", md.path)
-		for _, entry := range entries {
-			fmt.Printf("- %s\n", entry)
-		}
-		// md.GetRandomFile() returns a MemeFile, but that has a String() method,
-		// which is automatically used by fmt.Printf("%s")
-		fmt.Printf("This is the one:\n%s", md.GetRandomFile())
+func (md MemeDir) Print() {
+	fmt.Printf("Out of all the meme files in %s:\n", md.path)
+	for _, entry := range md.files {
+		fmt.Printf("- %s\n", entry)
 	}
+	// md.GetRandomFile() returns a MemeFile, but that has a String() method,
+	// which is automatically used by fmt.Printf("%s")
+	fmt.Printf("This is the one:\n%s", md.GetRandomFile())
 }
 
 func (md MemeDir) GetRandomFile() MemeFile {

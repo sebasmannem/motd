@@ -1,6 +1,11 @@
 package main
 
+import "log"
+
 func main() {
-	memeDir := NewMemeDir("./testdata/")
-	memeDir.Print()
+	if memeDir, err := NewMemeDir("./testdata/"); err != nil {
+		log.Fatalf("Houston, we have a problem: %e", err)
+	} else {
+		memeDir.Print()
+	}
 }
