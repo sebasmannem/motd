@@ -8,32 +8,52 @@ import (
 	"path/filepath"
 )
 
-func getMemeFiles(path string) []string {
-	var memeFiles []string
+type MemeFile string
+type MemeFiles []MemeFile
+type MemeDir struct {
+	path  string
+	files MemeFiles
+}
+
+func NewMemeDir(path string) MemeDir {
+	return MemeDir{
+		path: path,
+	}
+}
+
+func (md *MemeDir) getFiles() MemeFiles {
+	if md.files != nil {
+		return md.files
+	}
 	var entries []os.DirEntry
 	var err error
-	if entries, err = os.ReadDir(path); err != nil {
+	if entries, err = os.ReadDir(md.path); err != nil {
 		log.Fatal(err)
 	} else {
-		for _, e := range entries {
-			memeFiles = append(memeFiles, filepath.Join(path, e.Name()))
+		for _, entry := range entries {
+			md.files = append(md.files, MemeFile(filepath.Join(md.path, entry.Name())))
 		}
-		return memeFiles
+		return md.files
 	}
 	return nil
 }
 
-func printMemeFiles(path string) {
-	if entries := getMemeFiles(path); entries != nil {
+func (md *MemeDir) Print() {
+	if entries := md.getFiles(); entries == nil {
+		fmt.Printf("Location %s does no contain memes\n", md.path)
+	} else {
+		fmt.Printf("Out of all the meme files in %s:\n", md.path)
 		for _, entry := range entries {
-			fmt.Println(entry)
+			fmt.Printf("- %s\n", entry)
 		}
+		fmt.Printf("This is the one:\n%s", md.GetRandomFile())
 	}
 }
 
-func getRandomMemeFile(path string) string {
-	if entries := getMemeFiles(path); entries != nil {
-		return entries[rand.Intn(len(entries))]
-	}
-	return ""
+func (md MemeDir) GetRandomFile() MemeFile {
+	return md.files.getRandom()
+}
+
+func (mfs MemeFiles) getRandom() MemeFile {
+	return mfs[rand.Intn(len(mfs))]
 }
