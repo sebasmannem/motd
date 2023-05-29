@@ -14,3 +14,4 @@ But to learn go, so buil it step by step
 See files in [docs](docs)
 
 * [Step 1 Install](./docs/step1.md)
+* [Step 2 Hello world](docs/step2.md)
