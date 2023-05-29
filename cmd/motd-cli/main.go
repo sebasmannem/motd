@@ -7,14 +7,18 @@ import (
 	"path/filepath"
 )
 
-func main() {
+func printMemeFiles(path string) {
 	var entries []os.DirEntry
 	var err error
-	if entries, err = os.ReadDir("./testdata/"); err != nil {
+	if entries, err = os.ReadDir(path); err != nil {
 		log.Fatal(err)
 	} else {
 		for _, e := range entries {
-			fmt.Println(filepath.Join("./testdata", e.Name()))
+			fmt.Println(filepath.Join(path, e.Name()))
 		}
 	}
+}
+
+func main() {
+	printMemeFiles("./testdata/")
 }
