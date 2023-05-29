@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	entries, err := os.ReadDir("./testdata/")
+	var entries []os.DirEntry
+	var err error
+	entries, err = os.ReadDir("./testdata/")
 	if err != nil {
 		log.Fatal(err)
 	}
