@@ -10,12 +10,11 @@ import (
 func main() {
 	var entries []os.DirEntry
 	var err error
-	entries, err = os.ReadDir("./testdata/")
-	if err != nil {
+	if entries, err = os.ReadDir("./testdata/"); err != nil {
 		log.Fatal(err)
-	}
-
-	for _, e := range entries {
-		fmt.Println(filepath.Join("./testdata", e.Name()))
+	} else {
+		for _, e := range entries {
+			fmt.Println(filepath.Join("./testdata", e.Name()))
+		}
 	}
 }
